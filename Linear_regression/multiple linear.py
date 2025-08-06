@@ -8,12 +8,15 @@ class LinearRegression:
         self.w = None
         self.b = None
         cost_history = []
+        self.mu= None
+        self.sigma = None
         self.cost_history = cost_history
         
     def fit(self, x, y):
         m,n = x.shape
         self.w = np.zeros(n)
         self.b = 0
+        x= self.normalization(x)  # Normalize the feature matrix
         for i in range(self.iterations):
             dw,db= self.compute_gradient(x, y)
             alpha = self.learning_rate
@@ -42,7 +45,17 @@ class LinearRegression:
         plt.title('Cost Function History')
         plt.show()
         
-        
+    def normalization(self, x):
+        """Normalize the feature matrix."""
+        self.mu=np.mean(x,axis=0)
+        self.sigma=np.std(x,axis=0)
+        return (x-self.mu)/(self.sigma + 1e-8)  # Adding a small value to avoid division by zero
+    
+    def predict(self, x):
+        """Make predictions using the learned weights."""
+        x_normalized = (x - self.mu) / (self.sigma + 1e-8)
+        return np.dot(x_normalized, self.w) + self.b
+    
 if __name__ == "__main__":
     # Example usage
     x = np.array([[1, 2, 3, 4, 5],[1, 1, 1, 1, 1], [1, 2, 3, 4, 5], [4,5,6,7,8]])
