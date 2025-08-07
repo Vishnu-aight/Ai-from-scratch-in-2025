@@ -16,6 +16,7 @@ class LinearRegression:
         m,n = x.shape
         self.w = np.zeros(n)
         self.b = 0
+        y=y.ravel()
         x= self.normalization(x)  # Normalize the feature matrix
         for i in range(self.iterations):
             dw,db= self.compute_gradient(x, y)
